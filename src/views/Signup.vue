@@ -1,14 +1,14 @@
 <template>
   <div>
-    <form action="" autocomplete="on">
+    <form @submit.prevent="signup" autocomplete="on">
       <h2>Sign Up</h2>
       <div class="field">
         <label for="mail">EMAIL</label>
-        <input type="email" name="email" id="mail" autocomplete="on" />
+        <input type="email" v-model="email" name="email" id="mail" autocomplete="on" />
       </div>
       <div class="field">
         <label for="password">PASSWORD</label>
-        <input type="password" name="password" id="password" />
+        <input type="password" v-model="password" name="password" id="password" />
       </div>
       <button>Submit</button>
     </form>
@@ -16,7 +16,42 @@
 </template>
 
 <script>
-export default {};
+import gql from "graphql-tag";
+export default {
+  data() {
+    return {
+      email: "",
+      password: "",
+    };
+  },
+  methods: {
+    signup() {
+      this.$apollo
+        .mutate({
+          // Query
+          mutation: gql`
+            mutation($email: String!, $password: String!) {
+              register(email: $email, password: $password) {
+                token
+                email
+              }
+            }
+          `,
+          variables: {
+            email: this.email,
+            password: this.password,
+          },
+        })
+        .then((data) => {
+          console.log(data);
+          this.$router.push({ name: "Login" });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+  },
+};
 </script>
 
 <style scoped>

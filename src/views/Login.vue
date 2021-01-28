@@ -34,6 +34,7 @@ export default {
             mutation($email: String!, $password: String!) {
               login(email: $email, password: $password) {
                 token
+                email
               }
             }
           `,
@@ -45,6 +46,7 @@ export default {
         .then((data) => {
           onLogin(this.$apollo.provider.defaultClient, data.data.login.token);
           console.log(data);
+          localStorage.setItem("email", data.data.login.email);
           this.$router.push({ name: "Admin" });
         })
         .catch((error) => {

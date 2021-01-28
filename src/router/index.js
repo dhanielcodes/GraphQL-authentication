@@ -8,17 +8,41 @@ export const router = new VueRouter({
         {
             path: '/',
             name: 'Login',
-            component: () => import("../views/Login.vue")
+            component: () => import("../views/Login.vue"),
+            beforeEnter: (to, from, next) => {
+                if(localStorage.getItem("apollo-token")){
+                  return next({
+                    name: 'Admin'
+                  })
+                }
+                next()
+            }
         },
-        /* {
+        {
             path: '/signup',
             name: 'Signup',
-            component: () => import("../views/Signup.vue")
-        }, */
+            component: () => import("../views/Signup.vue"),
+            beforeEnter: (to, from, next) => {
+                if(localStorage.getItem("apollo-token")){
+                  return next({
+                    name: 'Admin'
+                  })
+                }
+                next()
+            }
+        },
         {
             path: '/admin',
             name: 'Admin',
-            component: () => import("../views/Admin.vue")
+            component: () => import("../views/Admin.vue"),
+            beforeEnter: (to, from, next) => {
+                if(!localStorage.getItem("apollo-token")){
+                  return next({
+                    name: 'Login'
+                  })
+                }
+                next()
+            }
         }
     ],
     mode: 'history'

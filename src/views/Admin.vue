@@ -1,26 +1,28 @@
 <template>
   <div>
     <h1>Admin</h1>
-    <h2>{{ me.email }}</h2>
+    <h2>{{ me }}</h2>
+    <a href="/" @click.prevent="logout">Logout</a>
   </div>
 </template>
 
 <script>
-import gql from "graphql-tag";
+import { onLogout } from "../vue-apollo";
 export default {
   data() {
     return {
       me: null,
     };
   },
-  apollo: {
-    me: gql`
-      query {
-        me {
-          email
-        }
-      }
-    `,
+  methods: {
+    logout() {
+      onLogout();
+      this.$router.push({ name: "Login" });
+      localStorage.removeItem("email");
+    },
+  },
+  created() {
+    this.me = localStorage.getItem("email");
   },
 };
 </script>

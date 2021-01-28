@@ -1,14 +1,14 @@
 <template>
   <div>
-    <form action="" autocomplete="on">
+    <form @submit.prevent="login" method="POST" autocomplete="on">
       <h2>Login</h2>
       <div class="field">
         <label for="mail">EMAIL</label>
-        <input type="email" name="email" id="mail" autocomplete="on" />
+        <input type="email" v-model="email" name="email" id="mail" autocomplete="on" />
       </div>
       <div class="field">
         <label for="password">PASSWORD</label>
-        <input type="password" name="password" id="password" />
+        <input type="password" v-model="password" name="password" id="password" />
       </div>
       <button>Submit</button>
     </form>
@@ -16,7 +16,43 @@
 </template>
 
 <script>
-export default {};
+import gql from "graphql-tag";
+import { onLogin } from "../vue-apollo";
+export default {
+  data() {
+    return {
+      email: "",
+      password: "",
+    };
+  },
+  methods: {
+    login() {
+      this.$apollo
+        .mutate({
+          // Query
+          mutation: gql`
+            mutation($email: String!, $password: String!) {
+              login(email: $email, password: $password) {
+                token
+              }
+            }
+          `,
+          variables: {
+            email: this.email,
+            password: this.password,
+          },
+        })
+        .then((data) => {
+          onLogin(this.$apollo.provider.defaultClient, data.data.login.token);
+          console.log(data);
+          this.$router.push({ name: "Admin" });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+  },
+};
 </script>
 
 <style scoped>

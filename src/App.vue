@@ -6,11 +6,27 @@
 </template>
 
 <script>
+//import gql from "graphql-tag";
+
 export default {
   name: "App",
   components: {
     Nav: () => import("./components/nav.vue"),
   },
+  data() {
+    return {
+      me: null,
+    };
+  },
+  /*   apollo: {
+    me: gql`
+      query {
+        me {
+          email
+        }
+      }
+    `,
+  }, */
 };
 </script>
 

@@ -3,7 +3,7 @@
     <img src="../assets/logo.svg" alt="" srcset="" />
     <div class="links">
       <router-link :to="{ name: 'Login' }">Login</router-link>
-      <router-link :to="{ name: 'Signup' }">Sign up</router-link>
+      <!-- <router-link :to="{ name: 'Signup' }">Sign up</router-link> -->
     </div>
   </div>
 </template>
